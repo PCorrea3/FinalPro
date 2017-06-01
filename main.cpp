@@ -1,8 +1,16 @@
 #include <QApplication>
+#include <QtCore>
 
-int main(int argc, char **argv) {
+#include <stdlib.h>
+
+#include "server.h"
+
+int main(int argc, char *argv[])
+{
     QApplication app(argc, argv);
-    //QGuiApplication::setApplicationDisplayName(NumberList::tr("Final Project"));
-    // To be able to rename window
+    QGuiApplication::setApplicationDisplayName(Server::tr("Fortune Server"));
+    Server server;
+    server.show();
+    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
     return app.exec();
 }
