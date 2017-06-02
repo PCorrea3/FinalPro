@@ -1,7 +1,9 @@
 #include <QtWidgets>
 #include <QtNetwork>
 
+#include <stdio.h>
 #include <stdlib.h>
+#include <Windows.h>
 
 #include "server.h"
 
@@ -38,9 +40,13 @@ Server::Server(QWidget *parent)
         sessionOpened();
     }
 
+
+
     for(int i =0; i < 49; i++)
     {
+
       numbers.append(qrand()%(1001 - 0) + 0);
+
 
     }
 
@@ -136,8 +142,8 @@ void Server::sendFortune()
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_0);
 
-
     out << numbers;
+    qDebug() << numbers;
     //out << fortunes.at(qrand() % fortunes.size());
 
     QTcpSocket *clientConnection = tcpServer->nextPendingConnection();

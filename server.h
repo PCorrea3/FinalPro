@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QDebug>
+#include <time.h>
+
 
 class QLabel;
 class QPushButton;

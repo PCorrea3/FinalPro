@@ -45,8 +45,9 @@ Client::Client(QWidget *parent)
     QLabel *portLabel = new QLabel(tr("S&erver port:"));
     portLabel->setBuddy(portLineEdit);
 
-    statusLabel = new QLabel(tr("This examples requires that you run the "
-                                "Number Server example as well."));
+//    input = new QTextEdit(tr("This examples requires that you run the "
+                               //"Number Server example as well."));
+    input = new QTextEdit();
 
     getNumberButton->setDefault(true);
     getNumberButton->setEnabled(false);
@@ -97,7 +98,7 @@ Client::Client(QWidget *parent)
     mainLayout->addWidget(hostCombo, 0, 1);
     mainLayout->addWidget(portLabel, 1, 0);
     mainLayout->addWidget(portLineEdit, 1, 1);
-    mainLayout->addWidget(statusLabel, 2, 0, 1, 2);
+    mainLayout->addWidget(input, 2, 0, 1, 2);
     mainLayout->addWidget(buttonBox, 3, 0, 1, 2);
 
 //    mainLayout->addWidget(title, 4, 0);
@@ -126,7 +127,7 @@ Client::Client(QWidget *parent)
         connect(networkSession, &QNetworkSession::opened, this, &Client::sessionOpened);
 
         getNumberButton->setEnabled(false);
-        statusLabel->setText(tr("Opening network session."));
+       // input->setText(tr("Opening network session."));
         networkSession->open();
     }
 }
@@ -143,21 +144,40 @@ void Client::readNumbers()
 {
     in.startTransaction();
 
-    QString nextFortune;
-    in >> nextFortune;
+    QList<int> numberslist;
+    //QString nextFortune;
+    //in >> nextFortune;
+
+    in >> numberslist;
 
     if (!in.commitTransaction())
         return;
 
+    /*
     if (nextFortune == currentFortune) {
         QTimer::singleShot(0, this, &Client::requestNumber);
         return;
+
     }
 
     currentFortune = nextFortune;
-    statusLabel->setText(currentFortune);
+    input->setText(currentFortune);
+    */
+
+    currentNumbers = numberslist;
+   //input->setText(QString::number(numberslist, 'F' , 2));
+
+    input->setReadOnly(true);
+
     getNumberButton->setEnabled(true);
+
+         qDebug() << numberslist;
+
+
+
 }
+
+
 
 void Client::displayError(QAbstractSocket::SocketError socketError)
 {
@@ -208,8 +228,8 @@ void Client::sessionOpened()
     settings.setValue(QLatin1String("DefaultNetworkConfiguration"), id);
     settings.endGroup();
 
-    statusLabel->setText(tr("This examples requires that you run the "
-                            "Fortune Server example as well."));
+   // input->setText(tr("This examples requires that you run the "
+                            //"Fortune Server example as well."));
 
     enableGetNumberButton();
 }
