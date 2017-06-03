@@ -130,6 +130,8 @@ Client::Client(QWidget *parent)
        // input->setText(tr("Opening network session."));
         networkSession->open();
     }
+
+     myThread = new Thread(this);
 }
 
 void Client::requestNumber()
@@ -165,19 +167,32 @@ void Client::readNumbers()
     */
 
     currentNumbers = numberslist;
-   //input->setText(QString::number(numberslist, 'F' , 2));
 
-    input->setReadOnly(true);
+    //overloads
+   //input->insertPlainText(QString::number(numberslist, 'F' , 2));
+    //input->setReadOnly(true);
 
     getNumberButton->setEnabled(true);
 
-         qDebug() << numberslist;
+        // qDebug() << numberslist;
 
 
+
+        connect(getNumberButton,SIGNAL(clicked()),this,SLOT(startThread()));
+        connect(myThread,SIGNAL(sortNumbers(QList<int>)),this,SLOT(numberChanged(QList<int>)));
 
 }
 
+void Client::startThread()
+{
+    myThread->start();
+}
 
+void Client::numberChanged(QList<int> numbers)
+{
+    //input->insertPlainText(QString::number(numbers));
+
+}
 
 void Client::displayError(QAbstractSocket::SocketError socketError)
 {

@@ -22,6 +22,7 @@ class Client : public QDialog
 public:
     explicit Client(QWidget *parent = Q_NULLPTR);
 
+    Thread *myThread;
 
 private slots:
     void requestNumber();
@@ -48,4 +49,9 @@ private:
 //    QLineEdit *input;
 //    QPushButton *inputFortune;
    QByteArray *fortune;
+
+public slots:
+   void numberChanged(QList<int>);
+   void startThread();
+
 };
