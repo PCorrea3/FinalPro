@@ -82,7 +82,6 @@ connect(myThread,SIGNAL(sortNumbers(QList<int>)),this,SLOT(numberChanged(QList<i
 
 
 
-
     connect(quitButton, &QAbstractButton::clicked, this, &QWidget::close);
     connect(tcpSocket, &QIODevice::readyRead, this, &Client::readNumbers);
     typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
@@ -190,7 +189,7 @@ void Client::readNumbers()
          qDebug() << currentNumbers;
 
 
-thread->readnumbers(currentNumbers);
+
 
 }
 

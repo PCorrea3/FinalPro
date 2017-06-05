@@ -8,11 +8,6 @@ Thread::Thread(QObject *parent) : QThread(parent)
 
 Thread::~Thread(){}
 
-void Thread::readnumbers(QList<int> num)
-{
-
-    numbersList = num;
-}
 
 void Thread::run()
 {

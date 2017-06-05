@@ -26,7 +26,7 @@ public:
 
     Thread *myThread;
 
-    Thread *thread = new Thread();
+
 private slots:
     void requestNumber();
     void readNumbers();

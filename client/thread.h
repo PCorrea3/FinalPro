@@ -16,8 +16,8 @@ public:
     explicit Thread(QObject *parent = 0);
     ~Thread();
     void run();
-    void readnumbers(QList<int> num);
-    QList<int> num;
+
+
     QList<int> numbersList;
 
 public slots:
