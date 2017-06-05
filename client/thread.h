@@ -20,10 +20,11 @@ public:
 
     QList<int> numbersList;
 
-public slots:
+
 
 signals:
     void sortNumbers(QList<int>);
+    QList<int> getValue();
 private:
 
 };

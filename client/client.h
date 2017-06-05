@@ -50,9 +50,12 @@ private:
     QNetworkSession *networkSession;
     QByteArray *fortune;
 
+
 public slots:
    void numberChanged(QList<int>);
    void startThread();
+   QList<int> getValue();
+signals:
 
 
 

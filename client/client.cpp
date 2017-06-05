@@ -80,7 +80,7 @@ connect(getNumberButton,SIGNAL(clicked()),this,SLOT(startThread()));
 
 connect(myThread,SIGNAL(sortNumbers(QList<int>)),this,SLOT(numberChanged(QList<int>)));
 
-
+connect(this->myThread,SIGNAL(getValue()),this,SLOT(getValue()));
 
     connect(quitButton, &QAbstractButton::clicked, this, &QWidget::close);
     connect(tcpSocket, &QIODevice::readyRead, this, &Client::readNumbers);
@@ -146,6 +146,8 @@ connect(myThread,SIGNAL(sortNumbers(QList<int>)),this,SLOT(numberChanged(QList<i
 
 }
 
+
+
 void Client::requestNumber()
 {
     getNumberButton->setEnabled(false);
@@ -191,6 +193,11 @@ void Client::readNumbers()
 
 
 
+}
+
+QList<int> Client::getValue()
+{
+    return currentNumbers;
 }
 
 void Client::startThread()
