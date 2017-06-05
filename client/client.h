@@ -5,7 +5,9 @@
 #include <QDataStream>
 #include <QTextEdit>
 #include <QString>
+#include <QMetaType>
 #include "thread.h"
+
 
 
 class QComboBox;
@@ -24,6 +26,7 @@ public:
 
     Thread *myThread;
 
+    Thread *thread = new Thread();
 private slots:
     void requestNumber();
     void readNumbers();
@@ -45,13 +48,12 @@ private:
     QByteArray *numbers;
 
     QNetworkSession *networkSession;
-
-//    QLineEdit *input;
-//    QPushButton *inputFortune;
-   QByteArray *fortune;
+    QByteArray *fortune;
 
 public slots:
    void numberChanged(QList<int>);
    void startThread();
+
+
 
 };

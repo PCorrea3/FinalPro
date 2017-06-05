@@ -72,6 +72,17 @@ Client::Client(QWidget *parent)
             this, &Client::enableGetNumberButton);
     connect(getNumberButton, &QAbstractButton::clicked,
             this, &Client::requestNumber);
+    //create thread
+    myThread = new Thread(this);
+
+
+connect(getNumberButton,SIGNAL(clicked()),this,SLOT(startThread()));
+
+connect(myThread,SIGNAL(sortNumbers(QList<int>)),this,SLOT(numberChanged(QList<int>)));
+
+
+
+
     connect(quitButton, &QAbstractButton::clicked, this, &QWidget::close);
     connect(tcpSocket, &QIODevice::readyRead, this, &Client::readNumbers);
     typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
@@ -131,7 +142,9 @@ Client::Client(QWidget *parent)
         networkSession->open();
     }
 
-     myThread = new Thread(this);
+
+
+
 }
 
 void Client::requestNumber()
@@ -169,17 +182,15 @@ void Client::readNumbers()
     currentNumbers = numberslist;
 
     //overloads
-   //input->insertPlainText(QString::number(numberslist, 'F' , 2));
+   //input->insertPlainText(QString::number(currentNumbers, 'F' , 2));
     //input->setReadOnly(true);
 
     getNumberButton->setEnabled(true);
 
-        // qDebug() << numberslist;
+         qDebug() << currentNumbers;
 
 
-
-        connect(getNumberButton,SIGNAL(clicked()),this,SLOT(startThread()));
-        connect(myThread,SIGNAL(sortNumbers(QList<int>)),this,SLOT(numberChanged(QList<int>)));
+thread->readnumbers(currentNumbers);
 
 }
 
@@ -191,6 +202,9 @@ void Client::startThread()
 void Client::numberChanged(QList<int> numbers)
 {
     //input->insertPlainText(QString::number(numbers));
+    qDebug() << "Hello";
+
+   qDebug() << numbers;
 
 }
 
