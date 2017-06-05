@@ -15,16 +15,13 @@ class Thread : public QThread
 public:
     explicit Thread(QObject *parent = 0);
     ~Thread();
-    void run();
-
 
     QList<int> numbersList;
 
-
-
 signals:
     void sortNumbers(QList<int>);
-    QList<int> getValue();
+public slots:
+     void run(QList<int>);
 private:
 
 };

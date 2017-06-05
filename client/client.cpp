@@ -45,17 +45,13 @@ Client::Client(QWidget *parent)
     QLabel *portLabel = new QLabel(tr("S&erver port:"));
     portLabel->setBuddy(portLineEdit);
 
-//    input = new QTextEdit(tr("This examples requires that you run the "
-                               //"Number Server example as well."));
+
     input = new QTextEdit();
 
     getNumberButton->setDefault(true);
     getNumberButton->setEnabled(false);
 
-//    // input area
-//    QLabel *title = new QLabel("Write a Fortune:");
-//    inputFortune = new QPushButton("Send Fortune");
-//    input = new QLineEdit();
+
 
     QPushButton *quitButton = new QPushButton(tr("Quit"));
 
@@ -72,15 +68,18 @@ Client::Client(QWidget *parent)
             this, &Client::enableGetNumberButton);
     connect(getNumberButton, &QAbstractButton::clicked,
             this, &Client::requestNumber);
-    //create thread
+
+
     myThread = new Thread(this);
 
+
+connect(this,SIGNAL(getValue(QList<int>)),myThread,SLOT(run(QList<int>)));
 
 connect(getNumberButton,SIGNAL(clicked()),this,SLOT(startThread()));
 
 connect(myThread,SIGNAL(sortNumbers(QList<int>)),this,SLOT(numberChanged(QList<int>)));
 
-connect(this->myThread,SIGNAL(getValue()),this,SLOT(getValue()));
+connect(quitButton,SIGNAL(clicked()),this,SLOT(stop()));
 
     connect(quitButton, &QAbstractButton::clicked, this, &QWidget::close);
     connect(tcpSocket, &QIODevice::readyRead, this, &Client::readNumbers);
@@ -111,10 +110,6 @@ connect(this->myThread,SIGNAL(getValue()),this,SLOT(getValue()));
     mainLayout->addWidget(input, 2, 0, 1, 2);
     mainLayout->addWidget(buttonBox, 3, 0, 1, 2);
 
-//    mainLayout->addWidget(title, 4, 0);
-//    mainLayout->addWidget(input, 4, 1);
-//    mainLayout->addWidget(inputFortune, 5, 0);
-
     setWindowTitle(QGuiApplication::applicationDisplayName());
     portLineEdit->setFocus();
 
@@ -137,7 +132,7 @@ connect(this->myThread,SIGNAL(getValue()),this,SLOT(getValue()));
         connect(networkSession, &QNetworkSession::opened, this, &Client::sessionOpened);
 
         getNumberButton->setEnabled(false);
-       // input->setText(tr("Opening network session."));
+
         networkSession->open();
     }
 
@@ -161,43 +156,29 @@ void Client::readNumbers()
     in.startTransaction();
 
     QList<int> numberslist;
-    //QString nextFortune;
-    //in >> nextFortune;
 
     in >> numberslist;
 
     if (!in.commitTransaction())
         return;
 
-    /*
-    if (nextFortune == currentFortune) {
-        QTimer::singleShot(0, this, &Client::requestNumber);
-        return;
-
-    }
-
-    currentFortune = nextFortune;
-    input->setText(currentFortune);
-    */
-
     currentNumbers = numberslist;
 
-    //overloads
-   //input->insertPlainText(QString::number(currentNumbers, 'F' , 2));
-    //input->setReadOnly(true);
 
+    input->insertPlainText("Unsorted Numbers: ");
+for(int i = 0; i < 49; i++)
+{
+   input->insertPlainText(QString::number(currentNumbers[i]));
+    input->insertPlainText(" ");
+}
+    input->setReadOnly(true);
     getNumberButton->setEnabled(true);
 
          qDebug() << currentNumbers;
 
 
+emit getValue(currentNumbers);
 
-
-}
-
-QList<int> Client::getValue()
-{
-    return currentNumbers;
 }
 
 void Client::startThread()
@@ -207,11 +188,21 @@ void Client::startThread()
 
 void Client::numberChanged(QList<int> numbers)
 {
-    //input->insertPlainText(QString::number(numbers));
-    qDebug() << "Hello";
+    input->insertPlainText("\n");
+    input->insertPlainText("Sorted Numbers: ");
+    for(int i = 0; i < 49; i++)
+    {
 
-   qDebug() << numbers;
+    input->insertPlainText(QString::number(numbers[i]));
+    input->insertPlainText(" ");
+    }
 
+
+}
+
+void Client::stop()
+{
+    exit(1);
 }
 
 void Client::displayError(QAbstractSocket::SocketError socketError)
@@ -268,11 +259,4 @@ void Client::sessionOpened()
 
     enableGetNumberButton();
 }
-/*
-void Client::sendFortune() {
-    inputFortune->setEnabled(false);
-    tcpSocket->abort();
-    tcpSocket->connectToHost(hostCombo->currentText(),
-        portLineEdit->text().toInt());
-}
-*/
+

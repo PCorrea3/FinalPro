@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <Windows.h>
+#include <QThread>
 
 #include "server.h"
 
@@ -47,24 +47,12 @@ Server::Server(QWidget *parent)
 
       numbers.append(qrand()%(1001 - 0) + 0);
 
-
     }
-
-
-    /*
-        fortunes << tr("You've been leading a dog's life. Stay off the furniture.")
-                 << tr("You've got to think about tomorrow.")
-                 << tr("You will be surprised by a loud noise.")
-                 << tr("You will feel hungry again in another hour.")
-                 << tr("You might have mail.")
-                 << tr("You cannot kill time without injuring eternity.")
-                 << tr("Computers are not intelligent. They only think they are.");
-     */
 
         QPushButton *quitButton = new QPushButton(tr("Quit"));
         quitButton->setAutoDefault(false);
         connect(quitButton, &QAbstractButton::clicked, this, &QWidget::close);
-        connect(tcpServer, &QTcpServer::newConnection, this, &Server::sendFortune);
+        connect(tcpServer, &QTcpServer::newConnection, this, &Server::sendNumbers);
 
         QHBoxLayout *buttonLayout = new QHBoxLayout;
         buttonLayout->addStretch(1);
@@ -91,6 +79,8 @@ Server::Server(QWidget *parent)
         mainLayout->addLayout(buttonLayout);
 
         setWindowTitle(QGuiApplication::applicationDisplayName());
+
+        connect(quitButton,SIGNAL(clicked()),this,SLOT(quit()));
 }
 
 void Server::sessionOpened()
@@ -136,20 +126,32 @@ void Server::sessionOpened()
                          .arg(ipAddress).arg(tcpServer->serverPort()));
 }
 
-void Server::sendFortune()
+void Server::sendNumbers()
 {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_0);
 
+    //endless loop
+    //for(;;)
+    for(int i = 0;i < 3; i++)
+    {
+
     out << numbers;
     qDebug() << numbers;
-    //out << fortunes.at(qrand() % fortunes.size());
 
+    QApplication::processEvents();
+}
     QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
     connect(clientConnection, &QAbstractSocket::disconnected,
             clientConnection, &QObject::deleteLater);
 
     clientConnection->write(block);
     clientConnection->disconnectFromHost();
+
+}
+
+void Server::quit()
+{
+    exit(1);
 }

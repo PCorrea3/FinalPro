@@ -21,12 +21,11 @@ public:
 
 private slots:
     void sessionOpened();
-    void sendFortune();
-
+    void sendNumbers();
+    void quit();
 private:
     QLabel *statusLabel;
     QTcpServer *tcpServer;
-   // QStringList fortunes;
     QList<int> numbers;
     QNetworkSession *networkSession;
 };

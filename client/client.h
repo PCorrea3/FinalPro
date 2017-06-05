@@ -43,20 +43,18 @@ private:
 
     QTcpSocket *tcpSocket;
     QDataStream in;
-    QString currentFortune;
     QList<int> currentNumbers;
     QByteArray *numbers;
 
     QNetworkSession *networkSession;
-    QByteArray *fortune;
 
 
 public slots:
    void numberChanged(QList<int>);
    void startThread();
-   QList<int> getValue();
+    void stop();
 signals:
-
+ void getValue(QList<int>);
 
 
 };

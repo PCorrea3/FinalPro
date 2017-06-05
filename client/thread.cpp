@@ -10,10 +10,10 @@ Thread::~Thread(){}
 
 
 
-void Thread::run()
+void Thread::run(QList<int> numbersList)
 {
     qRegisterMetaType<QList<int> >();
-     numbersList = getValue();
+
     QMutex mutex;
     mutex.lock();
 
@@ -24,3 +24,5 @@ void Thread::run()
 
 
 }
+
+
