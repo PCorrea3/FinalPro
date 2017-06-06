@@ -1,5 +1,4 @@
 #pragma once
-
 #include <QDialog>
 #include <QTcpSocket>
 #include <QDataStream>
@@ -8,8 +7,6 @@
 #include <QMetaType>
 #include "thread.h"
 
-
-
 class QComboBox;
 class QLabel;
 class QLineEdit;
@@ -17,16 +14,11 @@ class QPushButton;
 class QTcpSocket;
 class QNetworkSession;
 
-class Client : public QDialog
-{
+class Client : public QDialog {
     Q_OBJECT
-
 public:
     explicit Client(QWidget *parent = Q_NULLPTR);
-
     Thread *myThread;
-
-
 private slots:
     void requestNumber();
     void readNumbers();
@@ -48,13 +40,10 @@ private:
 
     QNetworkSession *networkSession;
 
-
 public slots:
    void numberChanged(QList<int>);
    void startThread();
-    void stop();
+   void stop();
 signals:
- void getValue(QList<int>);
-
-
+    void getValue(QList<int>);
 };
