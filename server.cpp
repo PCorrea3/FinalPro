@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <QThread>
+#include <QTime>
 
 #include "server.h"
 
@@ -41,6 +42,8 @@ Server::Server(QWidget *parent)
     }
 
 
+    QTime time = QTime::currentTime();
+     qsrand ((uint)time.msec());
 
     for(int i =0; i < 49; i++)
     {
@@ -49,10 +52,12 @@ Server::Server(QWidget *parent)
 
     }
 
+
         QPushButton *quitButton = new QPushButton(tr("Quit"));
         quitButton->setAutoDefault(false);
         connect(quitButton, &QAbstractButton::clicked, this, &QWidget::close);
         connect(tcpServer, &QTcpServer::newConnection, this, &Server::sendNumbers);
+
 
         QHBoxLayout *buttonLayout = new QHBoxLayout;
         buttonLayout->addStretch(1);
@@ -132,11 +137,8 @@ void Server::sendNumbers()
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_0);
 
-    //endless loop
-    //for(;;)
-    for(int i = 0;i < 3; i++)
-    {
-
+for(int i = 0; i < 3; i++)
+{
     out << numbers;
     qDebug() << numbers;
 

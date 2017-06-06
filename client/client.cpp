@@ -183,11 +183,22 @@ emit getValue(currentNumbers);
 
 void Client::startThread()
 {
+    input->insertPlainText("sorting operation started at ");
+    input->insertPlainText(QTime::currentTime().toString("hh:mm:ss.zzz"));
+    input->insertPlainText(" on ");
+    input->insertPlainText(QDate::currentDate().toString("dd.MM.yyyy"));
+    input->insertPlainText("\n");
+
     myThread->start();
 }
 
 void Client::numberChanged(QList<int> numbers)
 {
+    input->insertPlainText("\n");
+    input->insertPlainText("sorting operation concluded at ");
+    input->insertPlainText(QTime::currentTime().toString("hh:mm:ss.zzz"));
+    input->insertPlainText(" on ");
+    input->insertPlainText(QDate::currentDate().toString("dd.MM.yyyy"));
     input->insertPlainText("\n");
     input->insertPlainText("Sorted Numbers: ");
     for(int i = 0; i < 49; i++)
@@ -196,6 +207,7 @@ void Client::numberChanged(QList<int> numbers)
     input->insertPlainText(QString::number(numbers[i]));
     input->insertPlainText(" ");
     }
+    input->insertPlainText("\n\n");
 
 
 }
