@@ -39,7 +39,6 @@ private:
     QByteArray *numbers;
 
     QNetworkSession *networkSession;
-
 public slots:
    void numberChanged(QList<int>);
    void startThread();

@@ -39,13 +39,6 @@ Server::Server(QWidget *parent)
         sessionOpened();
     }
 
-
-    QTime time = QTime::currentTime();
-     qsrand ((uint)time.msec());
-
-    for(int i =0; i < 49; i++) {
-        numbers.append(qrand()%(1001 - 0) + 0);
-    }
         QPushButton *quitButton = new QPushButton(tr("Quit"));
         quitButton->setAutoDefault(false);
         connect(quitButton, &QAbstractButton::clicked, this, &QWidget::close);
@@ -79,7 +72,6 @@ Server::Server(QWidget *parent)
 
         connect(quitButton,SIGNAL(clicked()),this,SLOT(quit()));
 }
-
 void Server::sessionOpened() {
     // Save the used configuration
     if (networkSession) {
@@ -98,7 +90,7 @@ void Server::sessionOpened() {
 
     tcpServer = new QTcpServer(this);
     if (!tcpServer->listen()) {
-        QMessageBox::critical(this, tr("Fortune Server"),
+        QMessageBox::critical(this, tr("Number Server"),
                               tr("Unable to start the server: %1.")
                               .arg(tcpServer->errorString()));
         close();
@@ -118,7 +110,7 @@ void Server::sessionOpened() {
     if (ipAddress.isEmpty())
         ipAddress = QHostAddress(QHostAddress::LocalHost).toString();
     statusLabel->setText(tr("The server is running on\n\nIP: %1\nport: %2\n\n"
-                            "Run the Fortune Client example now.")
+                            "Run the Number Client example now.")
                          .arg(ipAddress).arg(tcpServer->serverPort()));
 }
 void Server::sendNumbers() {
@@ -126,12 +118,18 @@ void Server::sendNumbers() {
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_0);
 
-    for(int i = 0; i < 3; i++) {
+    QTime time = QTime::currentTime();
+    qsrand ((uint)time.msec());
+    numbers.clear();
+    for(int i =0; i < 49; i++) {
+        numbers.append(qrand()%((1001 - 0) + 0));
+    }
+    //for(int i = 0; i < 3; i++) {
     out << numbers;
-    qDebug() << numbers;
+    //qDebug() << numbers;
 
     QApplication::processEvents();
-    }
+
     QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
     connect(clientConnection, &QAbstractSocket::disconnected,
             clientConnection, &QObject::deleteLater);
@@ -139,7 +137,6 @@ void Server::sendNumbers() {
     clientConnection->write(block);
     clientConnection->disconnectFromHost();
 }
-
 void Server::quit() {
     exit(1);
 }
