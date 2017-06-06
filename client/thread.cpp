@@ -1,17 +1,8 @@
 #include "thread.h"
 
-Thread::Thread(QObject *parent) : QThread(parent)
-{
-
-
-}
-
+Thread::Thread(QObject *parent) : QThread(parent){}
 Thread::~Thread(){}
-
-
-
-void Thread::run(QList<int> numbersList)
-{
+void Thread::run(QList<int> numbersList) {
     qRegisterMetaType<QList<int> >();
 
     QMutex mutex;
@@ -21,8 +12,4 @@ void Thread::run(QList<int> numbersList)
 
     mutex.unlock();
     emit sortNumbers(numbersList);
-
-
 }
-
-
