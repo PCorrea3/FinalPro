@@ -5,6 +5,10 @@
 #include <QDataStream>
 #include <QTextEdit>
 #include <QString>
+#include <QMetaType>
+#include "thread.h"
+
+
 
 class QComboBox;
 class QLabel;
@@ -20,26 +24,37 @@ class Client : public QDialog
 public:
     explicit Client(QWidget *parent = Q_NULLPTR);
 
+    Thread *myThread;
+
+
 private slots:
     void requestNumber();
     void readNumbers();
     void displayError(QAbstractSocket::SocketError socketError);
     void enableGetNumberButton();
     void sessionOpened();
-    //void sendNumbers();
+
 private:
     QComboBox *hostCombo;
     QLineEdit *portLineEdit;
     QLabel *statusLabel;
+    QTextEdit *input;
     QPushButton *getNumberButton;
 
     QTcpSocket *tcpSocket;
     QDataStream in;
-    QString currentFortune;
+    QList<int> currentNumbers;
+    QByteArray *numbers;
 
     QNetworkSession *networkSession;
 
-//    QLineEdit *input;
-//    QPushButton *inputFortune;
-//    QByteArray *fortune;
+
+public slots:
+   void numberChanged(QList<int>);
+   void startThread();
+    void stop();
+signals:
+ void getValue(QList<int>);
+
+
 };
