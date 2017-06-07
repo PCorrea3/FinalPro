@@ -12,4 +12,5 @@ void Thread::run(QList<int> numbersList) {
 
     mutex.unlock();
     emit sortNumbers(numbersList);
+
 }

@@ -13,6 +13,7 @@ public:
     explicit Thread(QObject *parent = 0);
     ~Thread();
     QList<int> numbersList;
+
 signals:
     void sortNumbers(QList<int>);
 public slots:

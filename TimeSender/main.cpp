@@ -5,7 +5,8 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc,argv);
-
+    Timer timer;
+    timer.sendData();
 
     return app.exec();
 
