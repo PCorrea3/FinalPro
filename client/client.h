@@ -5,6 +5,7 @@
 #include <QTextEdit>
 #include <QString>
 #include <QMetaType>
+#include <QUdpSocket>
 #include "thread.h"
 
 class QComboBox;
@@ -39,10 +40,13 @@ private:
     QByteArray *numbers;
 
     QNetworkSession *networkSession;
+
+    QUdpSocket udpSocket;
 public slots:
    void numberChanged(QList<int>);
    void startThread();
    void stop();
+   void processPendingDatagrams();
 signals:
     void getValue(QList<int>);
 };

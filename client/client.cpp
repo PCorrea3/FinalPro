@@ -126,6 +126,11 @@ Client::Client(QWidget *parent)
 
         networkSession->open();
     }
+
+
+    udpSocket.bind();
+    connect(&udpSocket, SIGNAL(readyRead()),this,SLOT(processPendingTime()));
+
 }
 
 void Client::requestNumber() {
@@ -160,23 +165,19 @@ void Client::readNumbers() {
 }
 
 void Client::startThread() {
-    input->insertPlainText("sorting operation started at ");
-    input->insertPlainText(QTime::currentTime().toString("hh:mm:ss.zzz"));
-    input->insertPlainText(" on ");
-    input->insertPlainText(QDate::currentDate().toString("dd.MM.yyyy"));
-    input->insertPlainText("\n");
+  input->insertPlainText("sorting operation started at ");
 
+    processPendingDatagrams();
     myThread->start();
 }
 
 void Client::numberChanged(QList<int> numbers) {
+
+
     input->insertPlainText("\n");
     input->insertPlainText("sorting operation concluded at ");
-    input->insertPlainText(QTime::currentTime().toString("hh:mm:ss.zzz"));
-    input->insertPlainText(" on ");
-    input->insertPlainText(QDate::currentDate().toString("dd.MM.yyyy"));
-    input->insertPlainText("\n");
-    input->insertPlainText("Sorted Numbers: ");
+    processPendingDatagrams();
+
     for(int i = 0; i < 49; i++) {
         input->insertPlainText(QString::number(numbers[i]));
         input->insertPlainText(" ");
@@ -187,6 +188,31 @@ void Client::numberChanged(QList<int> numbers) {
 void Client::stop() {
     exit(1);
 }
+
+void Client::processPendingDatagrams()
+{
+    QByteArray time;
+
+    do{
+        time.resize(udpSocket.pendingDatagramSize());
+        udpSocket.readDatagram(time.data(),time.size());
+    }while(udpSocket.hasPendingDatagrams());
+
+    QDate _date;
+    QTime _time;
+    QDataStream in(&time, QIODevice::ReadOnly);
+    in.setVersion(QDataStream::Qt_4_0);
+    in >> _date >> _time;
+
+   input->insertPlainText(_time.currentTime().toString("hh:mm:ss.zzz"));
+    input->insertPlainText(" on ");
+    input->insertPlainText(_date.currentDate().toString("dd.MM.yyyy"));
+    input->insertPlainText("\n");
+
+
+}
+
+
 
 void Client::displayError(QAbstractSocket::SocketError socketError) {
     switch (socketError) {
@@ -237,3 +263,5 @@ void Client::sessionOpened() {
                             //"Fortune Server example as well."));
     enableGetNumberButton();
 }
+
+

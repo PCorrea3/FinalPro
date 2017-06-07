@@ -1,12 +1,13 @@
 #include <QApplication>
 #include "timer.h"
-
+#include <QProcess>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc,argv);
     Timer timer;
-    timer.show();
+    QProcess = new QProcess(this);
+    process->start(timer);
 
     return app.exec();
 

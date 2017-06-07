@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QObject>
 #include <QUdpSocket>
+#include <QTimer>
 #include <QTime>
 #include <QDate>
 #include <QDataStream>
@@ -20,7 +21,7 @@ private slots:
 private:
    QUdpSocket udpSocket;
    QTcpServer *tcpServer;
-
+    QTimer timer;
 };
 
 #endif // TIMER_H
