@@ -200,15 +200,18 @@ void Client::processPendingDatagrams()
         udpSocket.readDatagram(time.data(),time.size());
     }while(udpSocket.hasPendingDatagrams());
 
-    QDate _date;
-    QTime _time;
+    //QDate _date;
+   // QTime _time;
+    QDateTime dateTime;
     QDataStream in(&time, QIODevice::ReadOnly);
     in.setVersion(QDataStream::Qt_4_0);
-    in >> _date >> _time;
+    in >> dateTime;
 
-    input->insertPlainText(_time.toString());
+    input->insertPlainText(dateTime.time().toString());
+    //input->insertPlainText(_time.toString());
     input->insertPlainText(" on ");
-    input->insertPlainText(_date.toString());
+   // input->insertPlainText(_date.toString());
+      input->insertPlainText(dateTime.date().toString());
     input->insertPlainText("\n");
 
 

@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QDate>
+#include <QDateTime>
 #include <QDataStream>
 #include <QDebug>
 class Timer : public QWidget
@@ -19,7 +20,7 @@ private slots:
 
 
 private:
-   QUdpSocket *udpSocket;
+   QUdpSocket udpSocket;
 
 };
 

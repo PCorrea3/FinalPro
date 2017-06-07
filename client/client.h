@@ -6,6 +6,7 @@
 #include <QString>
 #include <QMetaType>
 #include <QUdpSocket>
+#include <QDateTime>
 #include "thread.h"
 
 class QComboBox;
