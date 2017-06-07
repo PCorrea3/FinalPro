@@ -127,8 +127,8 @@ Client::Client(QWidget *parent)
         networkSession->open();
     }
 
-
-    udpSocket.bind(1234);
+    input->insertPlainText("Hello");
+    udpSocket.bind(62219);
     connect(&udpSocket, SIGNAL(readyRead()),this,SLOT(processPendingDatagrams()));
 
 }
@@ -167,8 +167,8 @@ void Client::readNumbers() {
 void Client::startThread() {
 
   input->insertPlainText("sorting operation started at ");
-
-    processPendingDatagrams();
+  input->insertPlainText(lastTimeReceived);
+ input->insertPlainText(lastTimeReceived);
     myThread->start();
 }
 
@@ -177,7 +177,7 @@ void Client::numberChanged(QList<int> numbers) {
 
     input->insertPlainText("\n");
     input->insertPlainText("sorting operation concluded at ");
-    processPendingDatagrams();
+    input->insertPlainText(lastTimeReceived);
 
     for(int i = 0; i < 49; i++) {
         input->insertPlainText(QString::number(numbers[i]));
@@ -200,21 +200,18 @@ void Client::processPendingDatagrams()
         udpSocket.readDatagram(time.data(),time.size());
     }while(udpSocket.hasPendingDatagrams());
 
-    //QDate _date;
-   // QTime _time;
     QDateTime dateTime;
     QDataStream in(&time, QIODevice::ReadOnly);
     in.setVersion(QDataStream::Qt_4_0);
     in >> dateTime;
 
     input->insertPlainText(dateTime.time().toString());
-    //input->insertPlainText(_time.toString());
     input->insertPlainText(" on ");
-   // input->insertPlainText(_date.toString());
-      input->insertPlainText(dateTime.date().toString());
+    input->insertPlainText(dateTime.date().toString());
     input->insertPlainText("\n");
 
-
+     lastTimeReceived = time.data();
+     emit(lastTimeReceived);
 }
 
 

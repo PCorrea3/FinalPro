@@ -43,6 +43,7 @@ private:
     QNetworkSession *networkSession;
 
     QUdpSocket udpSocket;
+    QString lastTimeReceived;
 public slots:
    void numberChanged(QList<int>);
    void startThread();

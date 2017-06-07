@@ -14,7 +14,7 @@ void Timer::sendTime()
     out.setVersion(QDataStream::Qt_4_0);
     //out << QDate::currentDate().toString("dd.MM.yyyy") << QTime::currentTime().toString("hh:mm:ss.zzz");
 out << QDateTime::currentDateTime();
-    udpSocket.writeDatagram(time, QHostAddress::LocalHost, 1234);
+    udpSocket.writeDatagram(time, QHostAddress::LocalHost, 62219);
 }
 
 
