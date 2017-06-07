@@ -121,12 +121,13 @@ void Server::sendNumbers() {
     QTime time = QTime::currentTime();
     qsrand ((uint)time.msec());
     numbers.clear();
+
     for(int i =0; i < 49; i++) {
         numbers.append(qrand()%((1001 - 0) + 0));
     }
-    //for(int i = 0; i < 3; i++) {
+
     out << numbers;
-    //qDebug() << numbers;
+
 
     QApplication::processEvents();
 

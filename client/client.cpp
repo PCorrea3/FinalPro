@@ -128,8 +128,8 @@ Client::Client(QWidget *parent)
     }
 
 
-    udpSocket.bind();
-    connect(&udpSocket, SIGNAL(readyRead()),this,SLOT(processPendingTime()));
+    udpSocket.bind(1234);
+    connect(&udpSocket, SIGNAL(readyRead()),this,SLOT(processPendingDatagrams()));
 
 }
 
@@ -159,12 +159,13 @@ void Client::readNumbers() {
     }
     input->setReadOnly(true);
     getNumberButton->setEnabled(true);
-    qDebug() << currentNumbers;
+
 
     emit getValue(currentNumbers);
 }
 
 void Client::startThread() {
+
   input->insertPlainText("sorting operation started at ");
 
     processPendingDatagrams();
@@ -186,6 +187,7 @@ void Client::numberChanged(QList<int> numbers) {
 }
 
 void Client::stop() {
+
     exit(1);
 }
 
@@ -194,7 +196,7 @@ void Client::processPendingDatagrams()
     QByteArray time;
 
     do{
-        time.resize(udpSocket.pendingDatagramSize());
+         time.resize(udpSocket.pendingDatagramSize());
         udpSocket.readDatagram(time.data(),time.size());
     }while(udpSocket.hasPendingDatagrams());
 
@@ -204,9 +206,9 @@ void Client::processPendingDatagrams()
     in.setVersion(QDataStream::Qt_4_0);
     in >> _date >> _time;
 
-   input->insertPlainText(_time.currentTime().toString("hh:mm:ss.zzz"));
+    input->insertPlainText(_time.toString());
     input->insertPlainText(" on ");
-    input->insertPlainText(_date.currentDate().toString("dd.MM.yyyy"));
+    input->insertPlainText(_date.toString());
     input->insertPlainText("\n");
 
 

@@ -7,21 +7,20 @@
 #include <QTime>
 #include <QDate>
 #include <QDataStream>
-#include <QTcpServer>
+#include <QDebug>
 class Timer : public QWidget
 {
     Q_OBJECT
 public:
     Timer();
-    ~Timer();
+     void sendTime();
 
 private slots:
-    void sendTime();
+
 
 private:
-   QUdpSocket udpSocket;
-   QTcpServer *tcpServer;
-    QTimer timer;
+   QUdpSocket *udpSocket;
+
 };
 
 #endif // TIMER_H

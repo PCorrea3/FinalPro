@@ -2,19 +2,20 @@
 
 Timer::Timer()
 {
-    connect(&timer, SIGNAL(timeout()),this,SLOT(sendTime()));
+    udpSocket = new QUdpSocket(this);
+    udpSocket->bind(QHostAddress::LocalHost,1234);
 
-    timer.start();
 }
-Timer::~Timer(){}
+
 void Timer::sendTime()
 {
     QByteArray time;
     QDataStream out (&time, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_0);
-    out << QDate::currentDate() << QTime::currentTime();
+    out << QDate::currentDate().toString("dd.MM.yyyy") << QTime::currentTime().toString("hh:mm:ss.zzz");
 
-    udpSocket.writeDatagram(time, QHostAddress::LocalHost, tcpServer->serverPort());
-
-
+    udpSocket.writeDatagram(time, QHostAddress::LocalHost, 1234);
 }
+
+
+
